@@ -13,6 +13,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 	var STRING_CHART = "";
 	var STRING_INSERTEDITCHART = "";
+	var STRING_CHARTTYPE = "";
+	var STRING_CHARTBAR = "";
+	var STRING_CHARTPIE = "";
 	var STRING_CHARTWIDTH = "";
 	var STRING_CHARTHEIGHT = "";
 
@@ -22,6 +25,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		{
 		STRING_CHART = "Gr\u00E1fico";
 		STRING_INSERTEDITCHART = "Insertar/editar gr\u00E1fico";
+		STRING_CHARTTYPE = "Tipo de gr\u00E1fico";
+		STRING_CHARTBAR = "Barra";
+		STRING_CHARTPIE = "Torta";
 		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
 		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
 		}
@@ -29,6 +35,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		{
 		STRING_CHART = "Chart";
 		STRING_INSERTEDITCHART = "Insert/edit chart";
+		STRING_CHARTTYPE = "Chart type";
+		STRING_CHARTBAR = "Bar";
+		STRING_CHARTPIE = "Pie";
 		STRING_CHARTWIDTH = "Chart Width";
 		STRING_CHARTHEIGHT = "Chart Height";
 		}
@@ -68,13 +77,13 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var myDatasetsValue = [];
 		var myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
 
+		var myDataChartType = e.data.chartType;
 		var myDataRaw = e.data.chartcode;
 		if (myDataRaw!="")
 			{
 			var myDataLines = myDataRaw.split("\n");
-			var valueMax = 0;
 
-			myTempSrcData = canvasWidth + "," + canvasHeight + "///";
+			myTempSrcData = myDataChartType + "," + canvasWidth + "," + canvasHeight + "///";
 
 			for(var i = 0;i < myDataLines.length;i++)
 				{
@@ -118,44 +127,104 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					}
 				}
 
-			valueMax = Math.max.apply(null, myDatasetsValue);
-
-			myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
+			if (myDataChartType=="0")
 				{
-				type: "bar",
-				data: {labels:myLabels, datasets: myDatasets},
-				options:
+				myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
 					{
-					layout:{padding:{left:0,right:0,top:25,bottom:0}},
-					showDatapoints: true,
-					responsive:false,
-					title: {display:false},
-					legend: {display:false},
-					scales: {xAxes:[{gridLines:{display:false},ticks:{min:0}}],yAxes:[{gridLines:{display:false},ticks:{min:0,precision:0}}]},
-					animation:
+					type: "bar",
+					data: {labels:myLabels, datasets: myDatasets},
+					options:
 						{
-						onComplete: function () 
+						layout:{padding:{left:0,right:0,top:25,bottom:0}},
+						showDatapoints:true,
+						responsive:false,
+						title:{display:false},
+						legend:{display:false},
+						scales:{xAxes:[{gridLines:{display:false},ticks:{min:0}}],yAxes:[{gridLines:{display:false},ticks:{min:0,precision:0}}]},
+						animation:
 							{
-							var chartInstance = this.chart, ctx = chartInstance.ctx;
-							ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-							ctx.textAlign = "center";
-							ctx.textBaseline = "bottom";
-
-							this.data.datasets.forEach(function (dataset, i)
+							onComplete: function ()
 								{
-								var meta = chartInstance.controller.getDatasetMeta(i);
-								meta.data.forEach(function (bar, index)
-									{
-									var data = dataset.data[index];
-									ctx.fillText(data, bar._model.x, bar._model.y - 5);
-									});
-								});
+								var chartInstance = this.chart, ctx = chartInstance.ctx;
+								ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+								ctx.textAlign = "center";
+								ctx.textBaseline = "bottom";
 
-							chartToImg();
-							}
-						},
-					}
-				});
+								this.data.datasets.forEach(function (dataset, i)
+									{
+									var meta = chartInstance.controller.getDatasetMeta(i);
+									meta.data.forEach(function (bar, index)
+										{
+										var data = dataset.data[index];
+										ctx.fillText(data, bar._model.x, bar._model.y - 5);
+										});
+									});
+
+								chartToImg();
+								}
+							},
+						}
+					});
+				}
+			else if (myDataChartType=="1")
+				{
+				myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
+					{
+					type: "pie",
+					data: {labels:myLabels, datasets: myDatasets},
+					options:
+						{
+						layout:{padding:{left:0,right:0,top:0,bottom:0}},
+						showDatapoints:true,
+						responsive:false,
+						title:{display:false},
+						legend:{display:false},
+						animation:
+							{
+							onComplete: function ()
+								{
+								var chartInstance = this.chart, ctx = chartInstance.ctx;
+								ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+								ctx.textAlign = "center";
+								ctx.textBaseline = "bottom";
+
+								this.data.datasets.forEach(function (dataset)
+									{
+									for (var i = 0; i < dataset.data.length; i++)
+										{
+										var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+													total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+													mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+													start_angle = model.startAngle,
+													end_angle = model.endAngle,
+													mid_angle = start_angle + (end_angle - start_angle)/2;
+
+										var x = mid_radius * Math.cos(mid_angle);
+										var y = mid_radius * Math.sin(mid_angle);
+
+										ctx.fillStyle = "#fff";
+										if (i == 3)
+											{
+											ctx.fillStyle = "#444";
+											}
+
+										var val = dataset.data[i];
+										var percent = String(Math.round(val/total*100)) + "%";
+
+										if(val != 0)
+											{
+											ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+											ctx.fillText(percent, model.x + x, model.y + y + 15);
+											}
+										}
+									});
+
+								chartToImg();
+								}
+							},
+						}
+					});
+				}
 			}
 		}
 
@@ -188,6 +257,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var defaultChartCode = "";
 		var defaultChartWidth = 640;
 		var defaultChartHeight = 480;
+		var defaultCharType = "0";
 
 		if (imageStoredAlt!=null)
 			{
@@ -199,8 +269,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 				var tempData = imageStoredAlt.split("///");
 				var tempDataValues = tempData[0].split(",");
-				var tempDataValueWidth = tempDataValues[0];
-				var tempDataValueHeight = tempDataValues[1];
+				var tempDataValueWidth = tempDataValues[1];
+				var tempDataValueHeight = tempDataValues[2];
+				var tempDataValueCharType = tempDataValues[0];
 
 				if (isInt(parseInt(tempDataValueWidth)) || isFloat(parseFloat(tempDataValueWidth)))
 					{
@@ -220,6 +291,15 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					defaultChartHeight = 480;
 					}
 
+				if (isInt(parseInt(tempDataValueCharType)))
+					{
+					defaultCharType = tempDataValueCharType;
+					}
+					else
+					{
+					defaultCharType = "0";
+					}
+
 				}
 				catch(err)
 				{
@@ -236,6 +316,18 @@ tinymce.PluginManager.add("chart", function(editor, url)
 			minWidth: 500,
 			body:
 				[
+					{
+					type: "listbox",
+					name: "chartType",
+					label: STRING_CHARTTYPE,
+					maxWidth: null,
+					value: defaultCharType,
+					values: 
+						[
+						{text: STRING_CHARTBAR, value: "0"},
+						{text: STRING_CHARTPIE, value: "1"}
+						]
+					},
 					{
 					type: "textbox",
 					name: "chartcode",
