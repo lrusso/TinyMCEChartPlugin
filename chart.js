@@ -178,7 +178,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 	function replaceAll(str, find, replace)
 		{
-		return str.replace(new RegExp(find, 'g'), replace);
+		return str.replace(new RegExp(find, "g"), replace);
 		}
 
 	function createDialog()
