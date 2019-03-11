@@ -38,7 +38,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var canvasWidth;
 		var canvasHeight;
 
-		if (Number.isInteger(parseInt(e.data.chartWidth)))
+		if (isInt(parseInt(e.data.chartWidth)) || isFloat(parseFloat(e.data.chartWidth)))
 			{
 			canvasWidth = e.data.chartWidth;
 			}
@@ -46,7 +46,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 			{
 			canvasWidth = 640;
 			}
-		if (Number.isInteger(parseInt(e.data.chartHeight)))
+		if (isInt(parseInt(e.data.chartHeight)) || isFloat(parseFloat(e.data.chartHeight)))
 			{
 			canvasHeight = e.data.chartHeight;
 			}
@@ -69,74 +69,85 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
 
 		var myDataRaw = e.data.chartcode;
-		var myDataLines = myDataRaw.split("\n");
-
-		myTempSrcData = canvasWidth + "," + canvasHeight + "///";
-
-		for(var i = 0;i < myDataLines.length;i++)
+		if (myDataRaw!="")
 			{
-			if (i>0)
-				{
-				myTempSrcData = myTempSrcData + "---";
-				}
-			myTempSrcData = myTempSrcData + myDataLines[i];
+			var myDataLines = myDataRaw.split("\n");
 
-			var myDataLine = myDataLines[i].split(",");
+			myTempSrcData = canvasWidth + "," + canvasHeight + "///";
 
-			var barLabel = myDataLine[0];
-			var barValue = myDataLine[1];
-			var barColor = myDataLine[2];
+			for(var i = 0;i < myDataLines.length;i++)
+				{
+				if (i>0)
+					{
+					myTempSrcData = myTempSrcData + "---";
+					}
+				myTempSrcData = myTempSrcData + myDataLines[i];
 
-			if (barLabel!="")
-				{
-				myLabels.push(barLabel);
-				}
-				else
-				{
-				myLabels.push("-");
+				var myDataLine = myDataLines[i].split(",");
+
+				var barLabel = myDataLine[0];
+				var barValue = myDataLine[1];
+				var barColor = myDataLine[2];
+
+				if (barLabel!="")
+					{
+					myLabels.push(barLabel);
+					}
+					else
+					{
+					myLabels.push("-");
+					}
+
+				if (barValue!="")
+					{
+					myDatasetsValue.push(barValue);
+					}
+					else
+					{
+					myDatasetsValue.push(0);
+					}
+
+				if (barColor!="")
+					{
+					myDatasetsColor.push(barColor);
+					}
+					else
+					{
+					myDatasetsColor.push("grey");
+					}
 				}
 
-			if (barValue!="")
+			myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
 				{
-				myDatasetsValue.push(parseInt(barValue));
-				}
-				else
-				{
-				myDatasetsValue.push(0);
-				}
-
-			if (barColor!="")
-				{
-				myDatasetsColor.push(barColor);
-				}
-				else
-				{
-				myDatasetsColor.push("grey");
-				}
-
+				type: "bar",
+				data: {labels:myLabels, datasets: myDatasets},
+				options:
+					{
+					responsive:false,
+					title: {display:false},
+					legend: {display:false},
+					scales: {xAxes:[{gridLines:{display:false},ticks:{min:0}}],yAxes:[{gridLines:{display:false},ticks:{min:0,precision:0}}]},
+					animation: {onComplete: chartToImg}
+					}
+				});
 			}
-
-		myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
-			{
-			type: "bar",
-			data: {labels:myLabels, datasets: myDatasets},
-			options:
-				{
-				responsive: false,
-				title: {display: false},
-				legend: {display: false},
-				scales: {xAxes:[{gridLines:{display:false},ticks:{min:0}}],yAxes:[{gridLines:{display:false},ticks:{min:0}}]},
-				animation: {onComplete: chartToImg}
-				}
-			});
 		}
 
 	function chartToImg()
 		{
 		var url = myTempChart.toBase64Image();
 		editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\">");
-
 		document.body.removeChild(myTempCanvas);
+		}
+
+	function isInt(n)
+		{
+		return Number(n) === n && n % 1 === 0;
+		}
+
+	function isFloat(n)
+		{
+		return Number(n) === n && n % 1 !== 0;
 		}
 
 	function replaceAll(str, find, replace)
@@ -165,7 +176,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 				var tempDataValueWidth = tempDataValues[0];
 				var tempDataValueHeight = tempDataValues[1];
 
-				if (Number.isInteger(parseInt(tempDataValueWidth)))
+				if (isInt(parseInt(tempDataValueWidth)) || isFloat(parseFloat(tempDataValueWidth)))
 					{
 					defaultChartWidth = tempDataValueWidth;
 					}
@@ -174,7 +185,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					defaultChartWidth = 640;
 					}
 
-				if (Number.isInteger(parseInt(tempDataValueHeight)))
+				if (isInt(parseInt(tempDataValueHeight)) || isFloat(parseFloat(tempDataValueHeight)))
 					{
 					defaultChartHeight = tempDataValueHeight;
 					}
