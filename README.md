@@ -27,3 +27,5 @@ Add the plugin references into your TinyMCE configuration:
 ```
 plugins: "chart",
 toolbar1: "chart",
+paste_data_images: true,
+```
