@@ -338,21 +338,34 @@ tinymce.PluginManager.add("chart", function(editor, url)
 			body:
 				[
 					{
-					type: "listbox",
-					name: "chartType",
-					label: STRING_CHARTTYPE,
-					maxWidth: null,
-					value: defaultCharType,
-					values: 
+					type: "form",
+					layout: "grid",
+					columns: 3,
+					padding: 0,
+					items:
 						[
-						{text: STRING_CHARTBAR, value: "0"},
-						{text: STRING_CHARTPIE, value: "1"}
+							{
+							type: "listbox",
+							name: "chartType",
+							label: STRING_CHARTTYPE,
+							maxWidth: null,
+							value: defaultCharType,
+							values: 
+								[
+								{text: STRING_CHARTBAR, value: "0"},
+								{text: STRING_CHARTPIE, value: "1"}
+								]
+							},
+						{type: "textbox", label: STRING_CHARTWIDTH, name: "chartWidth", maxWidth: 70, value: defaultChartWidth},
+						{type: "textbox", label: STRING_CHARTHEIGHT, name: "chartHeight", maxWidth: 70, value: defaultChartHeight}
+
+
 						]
 					},
 					{
 					type: "form",
 					layout: "grid",
-					columns: 2,
+					columns: 3,
 					padding: 0,
 					items:
 						[
@@ -365,7 +378,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					{
 					type: "textbox",
 					name: "chartcode",
-					minHeight: 200,
+					minHeight: 70,
 					multiline: true,
 					spellcheck: false,
 					flex: 1,
@@ -373,17 +386,6 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					classes: "monospace",
 					value: defaultChartCode,
 					autofocus: true
-					},
-					{
-					type: "form",
-					layout: "grid",
-					columns: 2,
-					padding: 0,
-					items:
-						[
-						{type: "textbox", label: STRING_CHARTWIDTH, name: "chartWidth", maxWidth: 70, value: defaultChartWidth},
-						{type: "textbox", label: STRING_CHARTHEIGHT, name: "chartHeight", maxWidth: 70, value: defaultChartHeight},
-						]
 					}
 				],
 			onsubmit: function(e)
