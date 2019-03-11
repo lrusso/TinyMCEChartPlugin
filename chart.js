@@ -144,7 +144,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					data: {labels:myLabels, datasets: myDatasets},
 					options:
 						{
-						layout:{padding:{left:0,right:0,top:25,bottom:0}},
+						layout:{padding:{left:25,right:0,top:25,bottom:0}},
 						showDatapoints:true,
 						responsive:false,
 						title:{display:false},
