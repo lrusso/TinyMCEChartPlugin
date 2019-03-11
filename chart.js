@@ -18,6 +18,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	var STRING_CHARTPIE = "";
 	var STRING_CHARTWIDTH = "";
 	var STRING_CHARTHEIGHT = "";
+	var STRING_CHARTDESCRIPTION = "";
 
 	if (editor.settings.language=="es")
 		{
@@ -28,6 +29,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTPIE = "Torta";
 		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
 		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
+		STRING_CHARTDESCRIPTION = "C\u00F3digo del gr\u00E1fico (ejemplo l\u00EDnea por l\u00EDnea: ventas,10,blue)";
 		}
 		else
 		{
@@ -38,6 +40,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTPIE = "Pie";
 		STRING_CHARTWIDTH = "Chart Width";
 		STRING_CHARTHEIGHT = "Chart Height";
+		STRING_CHARTDESCRIPTION = "Chart code (example line by line: sales,10,blue)";
 		}
 
 	function createChart(e)
@@ -344,6 +347,19 @@ tinymce.PluginManager.add("chart", function(editor, url)
 						[
 						{text: STRING_CHARTBAR, value: "0"},
 						{text: STRING_CHARTPIE, value: "1"}
+						]
+					},
+					{
+					type: "form",
+					layout: "grid",
+					columns: 2,
+					padding: 0,
+					items:
+						[
+							{
+							type: "label",
+							label: STRING_CHARTDESCRIPTION
+							},
 						]
 					},
 					{
