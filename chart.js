@@ -22,8 +22,8 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		{
 		STRING_CHART = "Gr\u00E1fico";
 		STRING_INSERTEDITCHART = "Insertar/editar gr\u00E1fico";
-		STRING_CHARTWIDTH = "Ancho de gr\u00E1fico";
-		STRING_CHARTHEIGHT = "Alto de gr\u00E1fico";
+		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
+		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
 		}
 		else
 		{
