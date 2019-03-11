@@ -23,7 +23,7 @@ Add the Chart plugin script to your TinyMCE Web:
 <script src="chart.js"></script> 
 ```
 
-Add the plugin references into the TinyMCE configuration:
+Add the plugin references into your TinyMCE configuration:
 ```
 plugins: "chart",
 toolbar1: "chart",
