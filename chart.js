@@ -72,6 +72,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		if (myDataRaw!="")
 			{
 			var myDataLines = myDataRaw.split("\n");
+			var valueMax = 0;
 
 			myTempSrcData = canvasWidth + "," + canvasHeight + "///";
 
@@ -117,12 +118,15 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					}
 				}
 
+			valueMax = Math.max.apply(null, myDatasetsValue);
+
 			myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
 				{
 				type: "bar",
 				data: {labels:myLabels, datasets: myDatasets},
 				options:
 					{
+					layout:{padding:{left:0,right:0,top:25,bottom:0}},
 					showDatapoints: true,
 					responsive:false,
 					title: {display:false},
