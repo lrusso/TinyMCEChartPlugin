@@ -47,17 +47,31 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var canvasWidth;
 		var canvasHeight;
 
-		if (isInt(parseInt(e.data.chartWidth)) || isFloat(parseFloat(e.data.chartWidth)))
+		if (isInt(parseInt(e.data.chartWidth)))
 			{
-			canvasWidth = e.data.chartWidth;
+			if (parseInt(e.data.chartWidth)>0)
+				{
+				canvasWidth = parseInt(e.data.chartWidth);
+				}
+				else
+				{
+				canvasWidth = 640;
+				}
 			}
 			else
 			{
 			canvasWidth = 640;
 			}
-		if (isInt(parseInt(e.data.chartHeight)) || isFloat(parseFloat(e.data.chartHeight)))
+		if (isInt(parseInt(e.data.chartHeight)))
 			{
-			canvasHeight = e.data.chartHeight;
+			if (parseInt(e.data.chartHeight)>0)
+				{
+				canvasHeight = parseInt(e.data.chartHeight);
+				}
+				else
+				{
+				canvasHeight = 480;
+				}
 			}
 			else
 			{
