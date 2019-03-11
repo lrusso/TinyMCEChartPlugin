@@ -239,7 +239,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	function chartToImg()
 		{
 		var url = myTempChart.toBase64Image();
-		editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\">");
+		editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\" style=\"display:inline-block;margin-left:auto;margin-right:auto;\">");
 		document.body.removeChild(myTempCanvas);
 		}
 
