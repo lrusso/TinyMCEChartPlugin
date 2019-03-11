@@ -178,7 +178,6 @@ tinymce.PluginManager.add("chart", function(editor, url)
 						showDatapoints:true,
 						responsive:false,
 						title:{display:false},
-						legend:{display:false},
 						animation:
 							{
 							onComplete: function ()
@@ -214,7 +213,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 										if(val != 0)
 											{
 											ctx.fillText(dataset.data[i], model.x + x, model.y + y);
-											ctx.fillText(percent, model.x + x, model.y + y + 15);
+											ctx.fillText(percent, model.x + x + 2, model.y + y + 15);
 											}
 										}
 									});
