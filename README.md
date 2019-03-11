@@ -8,7 +8,7 @@ TinMCE Chart Plugin. Stores the chart data in the Alt attribute and uses Chart.j
 
 https://lrusso.github.io/TinyMCEChartPlugin/demo.htm
 
-## Example of chart code:
+## Example of chart code (required to make charts):
 
 ```
 Chart,10,red
