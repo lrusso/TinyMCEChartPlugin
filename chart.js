@@ -44,38 +44,32 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 	function createChart(e)
 		{
-		var canvasWidth;
-		var canvasHeight;
+		var canvasWidth = 640;
+		var canvasHeight = 480;
 
-		if (isInt(parseInt(e.data.chartWidth)))
+		var inputtedWidth = e.data.chartWidth;
+		var inputtedHeight = e.data.chartHeight;
+
+		if (inputtedWidth!="")
 			{
-			if (parseInt(e.data.chartWidth)>0)
+			if (isOnlyNumbers(inputtedWidth)==true)
 				{
-				canvasWidth = parseInt(e.data.chartWidth);
-				}
-				else
-				{
-				canvasWidth = 640;
-				}
-			}
-			else
-			{
-			canvasWidth = 640;
-			}
-		if (isInt(parseInt(e.data.chartHeight)))
-			{
-			if (parseInt(e.data.chartHeight)>0)
-				{
-				canvasHeight = parseInt(e.data.chartHeight);
-				}
-				else
-				{
-				canvasHeight = 480;
+				if (parseInt(inputtedWidth)>0)
+					{
+					canvasWidth = parseInt(inputtedWidth);
+					}
 				}
 			}
-			else
+
+		if (inputtedHeight!="")
 			{
-			canvasHeight = 480;
+			if (isOnlyNumbers(inputtedHeight)==true)
+				{
+				if (parseInt(inputtedHeight)>0)
+					{
+					canvasHeight = parseInt(inputtedHeight);
+					}
+				}
 			}
 
 		myTempCanvas = document.createElement("canvas");
@@ -256,6 +250,19 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	function isFloat(n)
 		{
 		return Number(n) === n && n % 1 !== 0;
+		}
+
+	function isOnlyNumbers(a)
+		{
+		for (var i = 0; i <= a.length; i++)
+			{
+			var value = a.charCodeAt(i);
+			if (value < 48 || value > 57)
+				{
+				return false;
+				}
+			}
+		return true;
 		}
 
 	function replaceAll(str, find, replace)
