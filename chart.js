@@ -334,7 +334,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 			{
 			title: STRING_INSERTEDITCHART,
 			autoScroll: true,
-			minWidth: 500,
+			minWidth: 600,
 			body:
 				[
 					{
