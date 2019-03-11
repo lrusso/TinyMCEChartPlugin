@@ -1,6 +1,6 @@
 # TinyMCE Chart Plugin
 
-TinyMCE Chart Plugin. Stores the chart data in the Alt attribute and uses Chart.js for rendering.
+TinyMCE Chart Plugin with editing charts capabilities. Stores the chart data in the Alt attribute and uses Chart.js for rendering.
 
 ![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/Chart.png)
 
