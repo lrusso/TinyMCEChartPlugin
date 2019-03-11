@@ -2,12 +2,11 @@
 
 TinMCE Chart Plugin. Stores the chart data in the Alt attribute and uses Chart.js for rendering.
 
+![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/Chart.png)
+
 ## Demo:
 
 https://lrusso.github.io/TinyMCEChartPlugin/demo.htm
-
-![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/Chart.png)
-
 
 ## Example of chart code:
 
