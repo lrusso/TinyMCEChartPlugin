@@ -19,9 +19,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	var STRING_CHARTWIDTH = "";
 	var STRING_CHARTHEIGHT = "";
 
-	var userLanguage = window.navigator.userLanguage || window.navigator.language;
-
-	if (userLanguage.substring(0,2)=="es")
+	if (editor.settings.language=="es")
 		{
 		STRING_CHART = "Gr\u00E1fico";
 		STRING_INSERTEDITCHART = "Insertar/editar gr\u00E1fico";
