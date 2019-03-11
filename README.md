@@ -1,2 +1,2 @@
-# TinyMCECharts
-TinyMCE Chart Plugin
+# Tiny MCE Chart Plugin
+
