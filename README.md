@@ -4,6 +4,9 @@
 
 https://lrusso.github.io/TinyMCEChartPlugin/demo.htm
 
+![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/Chart.png)
+
+
 ## Example of chart code:
 
 ```
