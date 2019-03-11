@@ -11,9 +11,9 @@ https://lrusso.github.io/TinyMCEChartPlugin/demo.htm
 ## Example of chart code (required to make charts):
 
 ```
-Chart,10,red
+Chart,15,red
 Inside,30,blue
-TinyMCE,50,green
+TinyMCE,45,green
 ```
 
 ## How to add it to TinyMCE
