@@ -81,7 +81,6 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		myTempCanvas.id = "ChartJsTemp";
 		myTempCanvas.width = canvasWidth;
 		myTempCanvas.height = canvasHeight;
-
 		myTempCanvas.style.display = "none";
 		document.body.appendChild(myTempCanvas);
 
@@ -91,7 +90,6 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
 
 		var myDataChartType = e.data.chartType;
-		var myDataChartCentered = e.data.chartCentered;
 		var myDataRaw = e.data.chartcode;
 
 		if (myDataRaw!="")
@@ -142,7 +140,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					}
 				}
 
-			defaultCentered = myDataChartCentered;
+			defaultCentered = e.data.chartCentered;
 
 			if (myDataChartType=="0")
 				{
@@ -314,48 +312,33 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					{
 					defaultCharType = tempDataValueCharType;
 					}
-					else
-					{
-					defaultCharType = "0";
-					}
 
 				if (isInt(parseInt(tempDataValueWidth)) || isFloat(parseFloat(tempDataValueWidth)))
 					{
 					defaultChartWidth = tempDataValueWidth;
-					}
-					else
-					{
-					defaultChartWidth = 640;
 					}
 
 				if (isInt(parseInt(tempDataValueHeight)) || isFloat(parseFloat(tempDataValueHeight)))
 					{
 					defaultChartHeight = tempDataValueHeight;
 					}
-					else
-					{
-					defaultChartHeight = 480;
-					}
+				}
+				catch(err)
+				{
+				}
 
-				try
+			try
+				{
+				var checkingCentered1 = imageStoredNode.style.display;
+				var checkingCentered2 = imageStoredNode.style["margin-left"];
+				var checkingCentered3 = imageStoredNode.style["margin-right"];
+				if (checkingCentered1=="block" && checkingCentered2=="auto" && checkingCentered3=="auto")
 					{
-					var checkingCentered1 = imageStoredNode.style.display;
-					var checkingCentered2 = imageStoredNode.style["margin-left"];
-					var checkingCentered3 = imageStoredNode.style["margin-right"];
-					if (checkingCentered1=="block" && checkingCentered2=="auto" && checkingCentered3=="auto")
-						{
-						defaultCentered = true;
-						}
-					}
-					catch(err)
-					{
+					defaultCentered = true;
 					}
 				}
 				catch(err)
 				{
-				defaultCharType = "0";
-				defaultChartWidth = 640;
-				defaultChartHeight = 480;
 				}
 			}
 
