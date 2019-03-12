@@ -32,7 +32,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
 		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
 		STRING_CENTERED = "Centrado";
-		STRING_CHARTDESCRIPTION = "C\u00F3digo del gr\u00E1fico (ejemplo l\u00EDnea por l\u00EDnea: ventas,10,blue)";
+		STRING_CHARTDESCRIPTION = "C\u00F3digo del gr\u00E1fico (ejemplo, l\u00EDnea por l\u00EDnea: ventas,10,blue)";
 		}
 		else
 		{
@@ -44,7 +44,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTWIDTH = "Chart Width";
 		STRING_CHARTHEIGHT = "Chart Height";
 		STRING_CENTERED = "Centered";
-		STRING_CHARTDESCRIPTION = "Chart code (example line by line: sales,10,blue)";
+		STRING_CHARTDESCRIPTION = "Chart code (example, line by line: sales,10,blue)";
 		}
 
 	function createChart(e)
