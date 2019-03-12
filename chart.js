@@ -362,8 +362,6 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		editor.windowManager.open(
 			{
 			title: STRING_INSERTEDITCHART,
-			autoScroll: true,
-			minWidth: 600,
 			body:
 				[
 					{
@@ -373,23 +371,10 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					padding: 0,
 					items:
 						[
-							{
-							type: "listbox",
-							name: "chartType",
-							label: STRING_CHARTTYPE,
-							maxWidth: null,
-							value: defaultCharType,
-							values: 
-								[
-								{text: STRING_CHARTBAR, value: "0"},
-								{text: STRING_CHARTPIE, value: "1"}
-								]
-							},
-						{type: "textbox", label: STRING_CHARTWIDTH, maxWidth: 45, name: "chartWidth", value: defaultChartWidth},
-						{type: "textbox", label: STRING_CHARTHEIGHT, maxWidth: 45, name: "chartHeight", value: defaultChartHeight},
-						{type: "checkbox", label: STRING_CENTERED, name: "chartCentered", checked: defaultCentered}
-
-
+							{type: "listbox", label: STRING_CHARTTYPE, name: "chartType", value: defaultCharType, values: [{text: STRING_CHARTBAR, value: "0"},{text: STRING_CHARTPIE, value: "1"}]},
+							{type: "textbox", label: STRING_CHARTWIDTH, name: "chartWidth", value: defaultChartWidth, maxWidth: 45},
+							{type: "textbox", label: STRING_CHARTHEIGHT, name: "chartHeight", value: defaultChartHeight, maxWidth: 45},
+							{type: "checkbox", label: STRING_CENTERED, name: "chartCentered", checked: defaultCentered}
 						]
 					},
 					{
@@ -402,7 +387,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 							{
 							type: "label",
 							label: STRING_CHARTDESCRIPTION
-							},
+							}
 						]
 					},
 					{
