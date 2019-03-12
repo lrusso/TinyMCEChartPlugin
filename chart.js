@@ -10,6 +10,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	var myTempCanvas;
 	var myTempChart;
 	var myTempSrcData;
+	var defaultCentered = false;
 
 	var STRING_CHART = "";
 	var STRING_INSERTEDITCHART = "";
@@ -18,6 +19,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	var STRING_CHARTPIE = "";
 	var STRING_CHARTWIDTH = "";
 	var STRING_CHARTHEIGHT = "";
+	var STRING_CENTERED = "";
 	var STRING_CHARTDESCRIPTION = "";
 
 	if (editor.settings.language=="es")
@@ -29,6 +31,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTPIE = "Torta";
 		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
 		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
+		STRING_CENTERED = "Centrado";
 		STRING_CHARTDESCRIPTION = "C\u00F3digo del gr\u00E1fico (ejemplo l\u00EDnea por l\u00EDnea: ventas,10,blue)";
 		}
 		else
@@ -40,6 +43,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTPIE = "Pie";
 		STRING_CHARTWIDTH = "Chart Width";
 		STRING_CHARTHEIGHT = "Chart Height";
+		STRING_CENTERED = "Centered";
 		STRING_CHARTDESCRIPTION = "Chart code (example line by line: sales,10,blue)";
 		}
 
@@ -87,7 +91,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
 
 		var myDataChartType = e.data.chartType;
+		var myDataChartCentered = e.data.chartCentered;
 		var myDataRaw = e.data.chartcode;
+
 		if (myDataRaw!="")
 			{
 			var myDataLines = myDataRaw.split("\n");
@@ -135,6 +141,8 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					myDatasetsColor.push("grey");
 					}
 				}
+
+			defaultCentered = myDataChartCentered;
 
 			if (myDataChartType=="0")
 				{
@@ -239,7 +247,14 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	function chartToImg()
 		{
 		var url = myTempChart.toBase64Image();
-		editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\" style=\"display:block;margin-left:auto;margin-right:auto;\">");
+		if (defaultCentered==true)
+			{
+			editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\" style=\"display:block;margin-left:auto;margin-right:auto;\">");
+			}
+			else
+			{
+			editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\">");
+			}
 		document.body.removeChild(myTempCanvas);
 		}
 
@@ -276,9 +291,10 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var imageStoredNode = editor.selection.getNode();
 		var imageStoredAlt = imageStoredNode.alt;
 		var defaultChartCode = "";
+		var defaultCharType = "0";
 		var defaultChartWidth = 640;
 		var defaultChartHeight = 480;
-		var defaultCharType = "0";
+		defaultCentered = false;
 
 		if (imageStoredAlt!=null)
 			{
@@ -290,9 +306,18 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 				var tempData = imageStoredAlt.split("///");
 				var tempDataValues = tempData[0].split(",");
+				var tempDataValueCharType = tempDataValues[0];
 				var tempDataValueWidth = tempDataValues[1];
 				var tempDataValueHeight = tempDataValues[2];
-				var tempDataValueCharType = tempDataValues[0];
+
+				if (isInt(parseInt(tempDataValueCharType)))
+					{
+					defaultCharType = tempDataValueCharType;
+					}
+					else
+					{
+					defaultCharType = "0";
+					}
 
 				if (isInt(parseInt(tempDataValueWidth)) || isFloat(parseFloat(tempDataValueWidth)))
 					{
@@ -312,19 +337,23 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					defaultChartHeight = 480;
 					}
 
-				if (isInt(parseInt(tempDataValueCharType)))
+				try
 					{
-					defaultCharType = tempDataValueCharType;
+					var checkingCentered1 = imageStoredNode.style.display;
+					var checkingCentered2 = imageStoredNode.style["margin-left"];
+					var checkingCentered3 = imageStoredNode.style["margin-right"];
+					if (checkingCentered1=="block" && checkingCentered2=="auto" && checkingCentered3=="auto")
+						{
+						defaultCentered = true;
+						}
 					}
-					else
+					catch(err)
 					{
-					defaultCharType = "0";
 					}
-
 				}
 				catch(err)
 				{
-				defaultChartCode = "";
+				defaultCharType = "0";
 				defaultChartWidth = 640;
 				defaultChartHeight = 480;
 				}
@@ -340,7 +369,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					{
 					type: "form",
 					layout: "grid",
-					columns: 3,
+					columns: 4,
 					padding: 0,
 					items:
 						[
@@ -356,8 +385,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 								{text: STRING_CHARTPIE, value: "1"}
 								]
 							},
-						{type: "textbox", label: STRING_CHARTWIDTH, name: "chartWidth", maxWidth: 70, value: defaultChartWidth},
-						{type: "textbox", label: STRING_CHARTHEIGHT, name: "chartHeight", maxWidth: 70, value: defaultChartHeight}
+						{type: "textbox", label: STRING_CHARTWIDTH, maxWidth: 45, name: "chartWidth", value: defaultChartWidth},
+						{type: "textbox", label: STRING_CHARTHEIGHT, maxWidth: 45, name: "chartHeight", value: defaultChartHeight},
+						{type: "checkbox", label: STRING_CENTERED, name: "chartCentered", checked: defaultCentered}
 
 
 						]
