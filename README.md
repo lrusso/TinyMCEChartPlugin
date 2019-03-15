@@ -1,6 +1,6 @@
 # TinyMCE Chart Plugin
 
-TinyMCE Chart Plugin with editing charts capabilities. The chart is inserted as an image (with a Base64 src), the chart data is stored in the Alt attribute and the Chart.js library is used for rendering.
+TinyMCE Chart Plugin. The chart is inserted as an image (with a Base64 src), the chart data is stored in the Alt attribute and the Chart.js library is used for rendering.
 
 ![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/chart.png)
 
