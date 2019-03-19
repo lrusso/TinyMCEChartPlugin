@@ -4,11 +4,11 @@ The chart is inserted as an image (with a Base64 src), the chart data is stored 
 
 ![alt screenshot](https://raw.githubusercontent.com/lrusso/TinyMCEChartPlugin/master/chart.png)
 
-## Demo:
+## Demo
 
 https://lrusso.github.io/TinyMCEChartPlugin/demo.htm
 
-## Example of chart code (required to make charts):
+## Example of chart code
 
 ```
 Chart,15,red
