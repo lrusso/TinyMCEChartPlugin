@@ -144,6 +144,9 @@ tinymce.PluginManager.add("chart", function(editor, url)
 
 			defaultCentered = e.data.chartCentered;
 
+			editor.setProgressState(true);
+			editor.setMode("readonly");
+
 			if (myDataChartType=="0")
 				{
 				myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
@@ -256,6 +259,8 @@ tinymce.PluginManager.add("chart", function(editor, url)
 			editor.insertContent("<img src=\"" + url + "\" alt=\"" + myTempSrcData +  "\">");
 			}
 		document.body.removeChild(myTempCanvas);
+		editor.setProgressState(false);
+		editor.setMode("design");
 		}
 
 	function isInt(n)
