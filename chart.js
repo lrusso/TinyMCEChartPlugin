@@ -175,7 +175,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					data: {labels:myLabels, datasets: myDatasets},
 					options:
 						{
-						layout:{padding:{left:25,right:0,top:25,bottom:0}},
+						layout:{padding:{left:15,right:0,top:25,bottom:0}},
 						showDatapoints:true,
 						responsive:false,
 						maintainAspectRatio: false,
@@ -274,7 +274,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					data: {labels:myLabels, datasets: myDatasets},
 					options:
 						{
-						layout:{padding:{left:0,right:0,top:0,bottom:0}},
+						layout:{padding:{left:15,right:20,top:25,bottom:0}},
 						showDatapoints:true,
 						responsive:false,
 						maintainAspectRatio: false,
@@ -288,37 +288,17 @@ tinymce.PluginManager.add("chart", function(editor, url)
 								var chartInstance = this.chart, ctx = chartInstance.ctx;
 								ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
 								ctx.textAlign = "center";
+								ctx.fillStyle = "gray";
 								ctx.textBaseline = "bottom";
 
-								this.data.datasets.forEach(function (dataset)
+								this.data.datasets.forEach(function (dataset, i)
 									{
-									for (var i = 0; i < dataset.data.length; i++)
+									var meta = chartInstance.controller.getDatasetMeta(i);
+									meta.data.forEach(function (bar, index)
 										{
-										var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-													total = dataset._meta[Object.keys(dataset._meta)[0]].total,
-													mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
-													start_angle = model.startAngle,
-													end_angle = model.endAngle,
-													mid_angle = start_angle + (end_angle - start_angle)/2;
-
-										var x = mid_radius * Math.cos(mid_angle);
-										var y = mid_radius * Math.sin(mid_angle);
-
-										ctx.fillStyle = "#fff";
-										if (i == 3)
-											{
-											ctx.fillStyle = "#444";
-											}
-
-										var val = dataset.data[i];
-										var percent = String(Math.round(val/total*100)) + "%";
-
-										if(val != 0)
-											{
-											ctx.fillText(dataset.data[i], model.x + x, model.y + y);
-											ctx.fillText(percent, model.x + x + 2, model.y + y + 15);
-											}
-										}
+										var data = dataset.data[index];
+										ctx.fillText(data, bar._model.x, bar._model.y - 5);
+										});
 									});
 
 								chartToImg();
