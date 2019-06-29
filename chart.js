@@ -17,6 +17,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 	var STRING_CHARTTYPE = "";
 	var STRING_CHARTBAR = "";
 	var STRING_CHARTPIE = "";
+	var STRING_CHARTLINE = "";
 	var STRING_CHARTWIDTH = "";
 	var STRING_CHARTHEIGHT = "";
 	var STRING_CENTERED = "";
@@ -29,6 +30,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTTYPE = "Tipo de gr\u00E1fico";
 		STRING_CHARTBAR = "Barra";
 		STRING_CHARTPIE = "Torta";
+		STRING_CHARTLINE = "L\u00EDnea";
 		STRING_CHARTWIDTH = "Ancho del gr\u00E1fico";
 		STRING_CHARTHEIGHT = "Alto del gr\u00E1fico";
 		STRING_CENTERED = "Centrado";
@@ -41,6 +43,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		STRING_CHARTTYPE = "Chart type";
 		STRING_CHARTBAR = "Bar";
 		STRING_CHARTPIE = "Pie";
+		STRING_CHARTLINE = "Line";
 		STRING_CHARTWIDTH = "Chart Width";
 		STRING_CHARTHEIGHT = "Chart Height";
 		STRING_CENTERED = "Centered";
@@ -87,10 +90,18 @@ tinymce.PluginManager.add("chart", function(editor, url)
 		var myLabels = [];
 		var myDatasetsColor = [];
 		var myDatasetsValue = [];
-		var myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
-
 		var myDataChartType = e.data.chartType;
 		var myDataRaw = e.data.chartcode;
+
+		var myDatasets;
+		if (myDataChartType=="2")
+			{
+			myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue, fill:false, borderColor: "#3facee"}];
+			}
+			else
+			{
+			myDatasets = [{backgroundColor: myDatasetsColor, data: myDatasetsValue}];
+			}
 
 		if (myDataRaw!="")
 			{
@@ -130,13 +141,20 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					myDatasetsValue.push(0);
 					}
 
-				if (barColor!="")
+				if (myDataChartType=="2")
 					{
-					myDatasetsColor.push(barColor);
+					myDatasetsColor.push("#3facee");
 					}
-					else
+				else
 					{
-					myDatasetsColor.push("grey");
+					if (barColor!="")
+						{
+						myDatasetsColor.push(barColor);
+						}
+						else
+						{
+						myDatasetsColor.push("grey");
+						}
 					}
 				}
 
@@ -198,6 +216,67 @@ tinymce.PluginManager.add("chart", function(editor, url)
 						responsive:false,
 						maintainAspectRatio: false,
 						title:{display:false},
+						animation:
+							{
+							onComplete: function ()
+								{
+								var chartInstance = this.chart, ctx = chartInstance.ctx;
+								ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+								ctx.textAlign = "center";
+								ctx.textBaseline = "bottom";
+
+								this.data.datasets.forEach(function (dataset)
+									{
+									for (var i = 0; i < dataset.data.length; i++)
+										{
+										var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+													total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+													mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+													start_angle = model.startAngle,
+													end_angle = model.endAngle,
+													mid_angle = start_angle + (end_angle - start_angle)/2;
+
+										var x = mid_radius * Math.cos(mid_angle);
+										var y = mid_radius * Math.sin(mid_angle);
+
+										ctx.fillStyle = "#fff";
+										if (i == 3)
+											{
+											ctx.fillStyle = "#444";
+											}
+
+										var val = dataset.data[i];
+										var percent = String(Math.round(val/total*100)) + "%";
+
+										if(val != 0)
+											{
+											ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+											ctx.fillText(percent, model.x + x + 2, model.y + y + 15);
+											}
+										}
+									});
+
+								chartToImg();
+								}
+							},
+						}
+					});
+				}
+			else if (myDataChartType=="2")
+				{
+				myTempChart = new Chart(document.getElementById("ChartJsTemp").getContext("2d"),
+					{
+					type: "line",
+					data: {labels:myLabels, datasets: myDatasets},
+					options:
+						{
+						layout:{padding:{left:0,right:0,top:0,bottom:0}},
+						showDatapoints:true,
+						responsive:false,
+						maintainAspectRatio: false,
+						title:{display:false},
+						legend:{display: false},
+						scales:{xAxes:[{gridLines:{display:false}}],yAxes:[{gridLines:{display:false},ticks:{precision:0}}]},
 						animation:
 							{
 							onComplete: function ()
@@ -389,7 +468,7 @@ tinymce.PluginManager.add("chart", function(editor, url)
 					padding: 0,
 					items:
 						[
-							{type: "listbox", label: STRING_CHARTTYPE, name: "chartType", value: defaultCharType, values: [{text: STRING_CHARTBAR, value: "0"},{text: STRING_CHARTPIE, value: "1"}]},
+							{type: "listbox", label: STRING_CHARTTYPE, name: "chartType", value: defaultCharType, values: [{text: STRING_CHARTBAR, value: "0"},{text: STRING_CHARTPIE, value: "1"},{text: STRING_CHARTLINE, value: "2"}]},
 							{type: "textbox", label: STRING_CHARTWIDTH, name: "chartWidth", value: defaultChartWidth, maxWidth: 45},
 							{type: "textbox", label: STRING_CHARTHEIGHT, name: "chartHeight", value: defaultChartHeight, maxWidth: 45},
 							{type: "checkbox", label: STRING_CENTERED, name: "chartCentered", checked: defaultCentered}
